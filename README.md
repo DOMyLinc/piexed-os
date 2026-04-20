@@ -7,7 +7,7 @@
 <p align="center">
 
 [![Build](https://github.com/piexed-os/piexed-os/actions/workflows/build.yml/badge.svg)](https://github.com/piexed-os/piexed-os/actions)
-[![Version](https://img.shields.io/badge/Version-1.2.0-blue)](https://github.com/piexed-os/releases)
+[![Version](https://img.shields.io/badge/Version-1.2.0-blue)](https://github.com/DOMyLinc/piexed-os/releases/tag/newrelease)
 [![License](https://img.shields.io/badge/License-GPL--3.0-green)](LICENSE)
 
 </p>
