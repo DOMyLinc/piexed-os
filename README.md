@@ -7,7 +7,7 @@
 <p align="center">
 
 [![Build](https://github.com/piexed-os/piexed-os/actions/workflows/build.yml/badge.svg)](https://github.com/piexed-os/piexed-os/actions)
-[![Version](https://img.shields.io/badge/Version-1.2.0-blue)](https://github.com/DOMyLinc/piexed-os/releases/tag/newrelease)
+[![Version](https://img.shields.io/badge/Version-1.0.0-blue)](https://github.com/piexed-os/piexed-os/releases)
 [![License](https://img.shields.io/badge/License-GPL--3.0-green)](LICENSE)
 
 </p>
@@ -87,4 +87,4 @@ Bitcoin: `bc1qxy2kgdygjrsqtzq2n7yrfc0r8lgkzx6nv0kc3f3d`
 
 **Piẻxed OS - Professional. Secure. Private.**
 
-Built on Ubuntu LTS All the os is build by Piexed team and Dan kYi 
+Built on Ubuntu LTS
