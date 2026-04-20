@@ -4,14 +4,34 @@ name: Build Piẻxed OS ISO
 on:
   push:
     branches: [main, master]
+    tags:
+      - 'v*'
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g. 1.0.1)'
+        required: false
+        default: '1.0.1'
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     timeout-minutes: 180
-
     steps:
+      - name: Set version
+        id: set_version
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          if [ -z "$VERSION" ]; then
+            VERSION="${GITHUB_REF#refs/tags/v}"
+            VERSION="${VERSION:-1.0.0}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Building Piẻxed OS version: $VERSION"
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -32,3 +52,113 @@ jobs:
       - name: Configure base system
         run: |
           echo "piexed-os" | sudo tee workspace/chroot/etc/hostname
+          cat << 'EOF' | sudo tee workspace/chroot/etc/apt/sources.list
+deb http://archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse
+EOF
+
+      - name: Install core packages
+        run: |
+          sudo chroot workspace/chroot /bin/bash -c "
+            export DEBIAN_FRONTEND=noninteractive
+            apt-get update
+            apt-get install -y --no-install-recommends \
+              ubuntu-standard \
+              linux-image-generic \
+              systemd \
+              network-manager \
+              lightdm \
+              xfce4 \
+              xfce4-goodies \
+              vim \
+              sudo \
+              openssh-server \
+              curl \
+              wget \
+              git \
+              gparted \
+              htop \
+              neofetch \
+              firefox \
+              systemd-sysv
+          "
+
+      - name: Create piexed user
+        run: |
+          sudo chroot workspace/chroot /bin/bash -c "
+            useradd -m -s /bin/bash piexed
+            echo 'piexed:piexed' | chpasswd
+            echo 'piexed ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/piexed
+          "
+
+      - name: Configure LightDM
+        run: |
+          sudo mkdir -p workspace/chroot/etc/lightdm
+          sudo tee workspace/chroot/etc/lightdm/lightdm.conf << 'EOF'
+[LightDM]
+autologin-user=piexed
+user-session=xfce
+greeter-session=lightdm-gtk-greeter
+EOF
+
+      - name: Create version file
+        run: |
+          VERSION="${{ steps.set_version.outputs.version }}"
+          sudo tee workspace/chroot/etc/piexed-version << EOF
+PIEXED_VERSION="$VERSION"
+PIEXED_CODENAME="Professional Edition"
+EOF
+
+      - name: Create system tools
+        run: |
+          sudo tee workspace/chroot/usr/local/bin/piexed-info << 'EOF'
+#!/bin/bash
+echo "============================================"
+echo "    Piẻxed OS - System Info"
+echo "============================================"
+cat /etc/piexed-version 2>/dev/null || echo "Version: 1.0.0"
+echo "Kernel: $(uname -r)"
+echo "============================================"
+EOF
+          sudo chmod +x workspace/chroot/usr/local/bin/piexed-info
+
+      - name: Create SquashFS
+        run: |
+          cd workspace
+          sudo rsync -a --delete --exclude='/proc/*' --exclude='/sys/*' --exclude='/dev/*' --exclude='/run/*' chroot/ image/
+          sudo mksquashfs image squashfs/filesystem.squashfs -noappend -comp xz -b 1M
+
+      - name: Create ISO
+        run: |
+          cd workspace
+          sudo xorriso -as mkisofs \
+            -iso-level 3 \
+            -full-iso9660-filenames \
+            -volid "PIEXED_OS_${{ steps.set_version.outputs.version }}" \
+            -appid "Piẻxed OS" \
+            -publisher "Piẻxed OS" \
+            -output "${{ github.workspace }}/output/piexed-os.iso" \
+            -boot-info-table \
+            .
+
+      - name: Upload ISO
+        uses: actions/upload-artifact@v4
+        with:
+          name: piexed-os-iso
+          path: ${{ github.workspace }}/output/piexed-os.iso
+          retention-days: 30
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          files: ${{ github.workspace }}/output/piexed-os.iso
+          name: Piẻxed OS v${{ steps.set_version.outputs.version }} ISO
+          body: |
+            Piẻxed OS Professional Edition ISO v${{ steps.set_version.outputs.version }}
+            
+            Download and install!
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
