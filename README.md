@@ -73,7 +73,7 @@ piexed-music    # Music studio
 
 ## 📥 Download
 
-**[Get ISO from GitHub Releases](https://github.com/piexed-os/piexed-os/releases)**
+**[Get ISO from GitHub Releases](https://github.com/DOMyLinc/piexed-os/actions/runs/24688857653/artifacts/6541404322)**
 
 ---
 
