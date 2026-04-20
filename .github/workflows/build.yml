@@ -52,10 +52,7 @@ jobs:
       - name: Configure base system
         run: |
           echo "piexed-os" | sudo tee workspace/chroot/etc/hostname
-          cat << 'EOF' | sudo tee workspace/chroot/etc/apt/sources.list
-deb http://archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
-deb http://archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse
-EOF
+          printf 'deb http://archive.ubuntu.com/ubuntu jammy main restricted universe multiverse\ndeb http://archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse\n' | sudo tee workspace/chroot/etc/apt/sources.list
 
       - name: Install core packages
         run: |
@@ -94,32 +91,16 @@ EOF
       - name: Configure LightDM
         run: |
           sudo mkdir -p workspace/chroot/etc/lightdm
-          sudo tee workspace/chroot/etc/lightdm/lightdm.conf << 'EOF'
-[LightDM]
-autologin-user=piexed
-user-session=xfce
-greeter-session=lightdm-gtk-greeter
-EOF
+          printf '[LightDM]\nautologin-user=piexed\nuser-session=xfce\ngreeter-session=lightdm-gtk-greeter\n' | sudo tee -a workspace/chroot/etc/lightdm/lightdm.conf
 
       - name: Create version file
         run: |
           VERSION="${{ steps.set_version.outputs.version }}"
-          sudo tee workspace/chroot/etc/piexed-version << EOF
-PIEXED_VERSION="$VERSION"
-PIEXED_CODENAME="Professional Edition"
-EOF
+          printf 'PIEXED_VERSION="%s"\nPIEXED_CODENAME="Professional Edition"\n' "$VERSION" | sudo tee workspace/chroot/etc/piexed-version
 
       - name: Create system tools
         run: |
-          sudo tee workspace/chroot/usr/local/bin/piexed-info << 'EOF'
-#!/bin/bash
-echo "============================================"
-echo "    Piẻxed OS - System Info"
-echo "============================================"
-cat /etc/piexed-version 2>/dev/null || echo "Version: 1.0.0"
-echo "Kernel: $(uname -r)"
-echo "============================================"
-EOF
+          printf '#!/bin/bash\necho "============================================"\necho "    Piẻxed OS - System Info"\necho "============================================"\ncat /etc/piexed-version 2>/dev/null || echo "Version: 1.0.0"\necho "Kernel: $(uname -r)"\necho "============================================"\n' | sudo tee workspace/chroot/usr/local/bin/piexed-info
           sudo chmod +x workspace/chroot/usr/local/bin/piexed-info
 
       - name: Create SquashFS
