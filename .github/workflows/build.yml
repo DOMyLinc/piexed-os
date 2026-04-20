@@ -42,7 +42,7 @@ jobs:
 
       - name: Create directories
         run: |
-          mkdir -p output workspace/{chroot,image,efi}
+          mkdir -p output workspace/{chroot,image,efi,squashfs}
 
       - name: Bootstrap Ubuntu
         run: |
@@ -103,14 +103,19 @@ jobs:
           printf '#!/bin/bash\necho "============================================"\necho "    Piẻxed OS - System Info"\necho "============================================"\ncat /etc/piexed-version 2>/dev/null || echo "Version: 1.0.0"\necho "Kernel: $(uname -r)"\necho "============================================"\n' | sudo tee workspace/chroot/usr/local/bin/piexed-info
           sudo chmod +x workspace/chroot/usr/local/bin/piexed-info
 
-      - name: Create SquashFS
+      - name: Copy chroot to image
         run: |
           cd workspace
           sudo rsync -a --delete --exclude='/proc/*' --exclude='/sys/*' --exclude='/dev/*' --exclude='/run/*' chroot/ image/
+
+      - name: Create SquashFS
+        run: |
+          cd workspace
           sudo mksquashfs image squashfs/filesystem.squashfs -noappend -comp xz -b 1M
 
       - name: Create ISO
         run: |
+          mkdir -p output
           cd workspace
           sudo xorriso -as mkisofs \
             -iso-level 3 \
