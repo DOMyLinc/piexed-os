@@ -1,0 +1,93 @@
+# Piẻxed OS GRUB Theme
+# Professional appearance inspired by Dell and macOS
+
+title-text: "Piẻxed OS"
+title-font: "Ubuntu Bold 20"
+title-color: "#FFFFFF"
+title-selected-color: "#E63946"
+
+message-font: "Ubuntu Regular 14"
+message-color: "#AAAAAA"
+message-selected-color: "#FFFFFF"
+
+boot-menu {
+    left = 20%
+    top = 35%
+    width = 60%
+    height = 35%
+}
+
+desktop-image {
+    filename = "background.png"
+    horizontal-align = "center"
+    vertical-align = "center"
+}
+
+plus {
+    graphics = "plus.png"
+    state = "highlighted"
+}
+
+plus {
+    graphics = "plus_selection.png"
+    state = "unhighlighted"
+}
+
+freefont {
+    spacing = 0
+    glyph_width = 16
+    glyph_height = 16
+    glyph_ascent = 12
+    glyph_descent = 2
+    file = "dejavu_16.pf2"
+}
+
+.faded_image_button {
+    horizontal-align = "center"
+    vertical-align = "center"
+}
+
+boot_menu {
+    item_font {
+        font = "DejaVu Sans Regular 16"
+        color = "#FFFFFF"
+    }
+
+    item_color {
+        state = "unhighlighted"
+        color = "#FFFFFF"
+    }
+
+    item_color {
+        state = "highlighted"
+        color = "#E63946"
+    }
+
+    item_padding = "10"
+    item_height = 36
+
+    icon_size = 24
+
+    selected_item {
+        left = 0
+        top = 50%
+        right = 100%
+        height = 36
+        horizontal-align = "center"
+        item_icon_space = "0 0 0"
+        component "menu_entry" {
+            left = 20
+            right = 90
+            horizontal-align = "left"
+        }
+        component "summary" {
+            right = 100
+            horizontal-align = "right"
+        }
+    }
+}
+
+image {
+    file = "logo.png"
+    type = "boot_menu_indicator"
+}

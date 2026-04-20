@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Piẻxed OS Strawberry Logo -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="strawberryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E63946"/>
+      <stop offset="50%" style="stop-color:#DC2F3D"/>
+      <stop offset="100%" style="stop-color:#9D0208"/>
+    </linearGradient>
+    <linearGradient id="leafGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2A9D8F"/>
+      <stop offset="100%" style="stop-color:#1A7A6E"/>
+    </linearGradient>
+    <radialGradient id="seedGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#F4E4C1"/>
+      <stop offset="100%" style="stop-color:#D4A84B"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Strawberry Body -->
+  <path d="M256 80 C180 80 120 150 120 220 C120 290 160 350 200 400 C220 430 256 470 256 470 C256 470 292 430 312 400 C352 350 392 290 392 220 C392 150 332 80 256 80 Z" fill="url(#strawberryGradient)"/>
+
+  <!-- Seeds -->
+  <g fill="url(#seedGradient)">
+    <ellipse cx="180" cy="180" rx="6" ry="8" transform="rotate(-15 180 180)"/>
+    <ellipse cx="220" cy="165" rx="6" ry="8" transform="rotate(-15 220 165)"/>
+    <ellipse cx="265" cy="160" rx="6" ry="8" transform="rotate(-15 265 160)"/>
+    <ellipse cx="310" cy="170" rx="6" ry="8" transform="rotate(-15 310 170)"/>
+    <ellipse cx="345" cy="190" rx="6" ry="8" transform="rotate(-15 345 190)"/>
+    <ellipse cx="165" cy="230" rx="6" ry="8" transform="rotate(-15 165 230)"/>
+    <ellipse cx="210" cy="220" rx="6" ry="8" transform="rotate(-15 210 220)"/>
+    <ellipse cx="255" cy="215" rx="6" ry="8" transform="rotate(-15 255 215)"/>
+    <ellipse cx="300" cy="220" rx="6" ry="8" transform="rotate(-15 300 220)"/>
+    <ellipse cx="185" cy="280" rx="6" ry="8" transform="rotate(-15 185 280)"/>
+    <ellipse cx="230" cy="275" rx="6" ry="8" transform="rotate(-15 230 275)"/>
+    <ellipse cx="280" cy="270" rx="6" ry="8" transform="rotate(-15 280 270)"/>
+    <ellipse cx="200" cy="330" rx="6" ry="8" transform="rotate(-15 200 330)"/>
+    <ellipse cx="250" cy="325" rx="6" ry="8" transform="rotate(-15 250 325)"/>
+    <ellipse cx="300" cy="335" rx="6" ry="8" transform="rotate(-15 300 335)"/>
+    <ellipse cx="220" cy="380" rx="6" ry="8" transform="rotate(-15 220 380)"/>
+    <ellipse cx="275" cy="375" rx="6" ry="8" transform="rotate(-15 275 375)"/>
+    <ellipse cx="248" cy="420" rx="5" ry="7" transform="rotate(-15 248 420)"/>
+  </g>
+
+  <!-- Leaves -->
+  <g fill="url(#leafGradient)">
+    <path d="M256 80 C250 50 280 30 256 10 C232 30 262 50 256 80 Z"/>
+    <path d="M256 80 C220 70 180 40 160 20 C200 30 230 60 256 80 Z"/>
+    <path d="M256 80 C210 90 170 80 150 70 C190 75 230 85 256 80 Z"/>
+    <path d="M256 80 C292 70 332 40 352 20 C312 30 282 60 256 80 Z"/>
+    <path d="M256 80 C302 90 342 80 362 70 C322 75 282 85 256 80 Z"/>
+  </g>
+</svg>

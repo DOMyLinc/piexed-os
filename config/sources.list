@@ -1,0 +1,10 @@
+# Piexed OS APT Sources
+
+# Main Ubuntu Repository
+deb http://archive.ubuntu.com/ubuntu/ jammy main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu/ jammy-backports main restricted universe multiverse
+
+# Piexed OS Repository (placeholder)
+# deb http://packages.piexed-os.org/ stable main

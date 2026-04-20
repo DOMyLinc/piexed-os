@@ -1,0 +1,108 @@
+# Piẻxed OS Plymouth Theme Script
+# Professional boot splash theme inspired by Dell and macOS
+
+# Configuration
+Window.SetBackgroundTopColor(0.102, 0.102, 0.180);    # #1A1A2E
+Window.SetBackgroundBottomColor(0.102, 0.102, 0.180); # #1A1A2E
+
+# Logo positioning - centered
+logo_image = Image("logo.png");
+logo_width = logo_image.GetWidth();
+logo_height = logo_image.GetHeight();
+
+factor = 0.5;
+scaled_width = (Window.GetMaxWidth() - logo_width * factor) / 2;
+scaled_height = (Window.GetMaxHeight() - logo_height * factor) / 2;
+
+# Progress bar dimensions
+progress_bar_width = 400;
+progress_bar_height = 4;
+progress_bar_x = (Window.GetMaxWidth() - progress_bar_width) / 2;
+progress_bar_y = Window.GetMaxHeight() * 0.75;
+
+# Progress bar background
+progress_bar_bg = Rectangle();
+progress_bar_bg.SetX(progress_bar_x);
+progress_bar_bg.SetY(progress_bar_y);
+progress_bar_bg.SetWidth(progress_bar_width);
+progress_bar_bg.SetHeight(progress_bar_height);
+progress_bar_bg.SetColor(0x2D2D3D);
+
+# Progress bar fill
+progress_bar_fill = Rectangle();
+progress_bar_fill.SetX(progress_bar_x);
+progress_bar_fill.SetY(progress_bar_y);
+progress_bar_fill.SetWidth(0);
+progress_bar_fill.SetHeight(progress_bar_height);
+progress_bar_fill.SetColor(0xE63946);  # Strawberry red
+
+# Status message
+status_message = Text("status", 12, 0, 0);
+status_message.SetFontName("Ubuntu");
+status_message.SetFontSize(14);
+status_message.SetColor(0xFFFFFF);
+status_message.SetText("Starting Piẻxed OS...");
+
+# Title text
+title_text = Text("title", 14, 0, 0);
+title_text.SetFontName("Ubuntu");
+title_text.SetFontSize(32);
+title_text.SetColor(0xFFFFFF);
+title_text.SetText("Piẻxed OS");
+
+# Version text
+version_text = Text("version", 14, 0, 0);
+version_text.SetFontName("Ubuntu");
+version_text.SetFontSize(14);
+version_text.SetColor(0xAAAAAA);
+version_text.SetText("v1.0.0");
+
+# Refresh handler
+fun refresh_callback() {
+    # Position logo
+    logo_x = (Window.GetMaxWidth() - logo_width * factor) / 2;
+    logo_y = (Window.GetMaxHeight() - logo_height * factor) / 3;
+    
+    # Position title
+    title_x = (Window.GetMaxWidth() - title_text.GetWidth()) / 2;
+    title_y = logo_y + logo_height * factor + 30;
+    
+    # Position version
+    version_x = (Window.GetMaxWidth() - version_text.GetWidth()) / 2;
+    version_y = title_y + 40;
+    
+    # Position status
+    status_x = (Window.GetMaxWidth() - status_message.GetWidth()) / 2;
+    status_y = version_y + 30;
+    
+    # Position progress bar
+    progress_bar_bg.SetX(progress_bar_x);
+    progress_bar_bg.SetY(progress_bar_y);
+    
+    progress_bar_fill.SetX(progress_bar_x);
+    progress_bar_fill.SetY(progress_bar_y);
+    progress_bar_fill.SetWidth(progress_bar_width * progress);
+    
+    # Update logo position if exists
+    if (defined logo_image) {
+        # Logo would be positioned here
+    }
+}
+
+Plymouth.SetUpdateHandler(Function("refresh_callback"));
+
+# Message handler
+fun display_message_callback(message) {
+    status_message.SetText(message);
+    status_message.SetPosition(Window.GetMaxWidth()/2 - status_message.GetWidth()/2,
+                                Window.GetMaxHeight() * 0.75 + 40);
+}
+
+# Progress update handler
+progress = 0;
+fun display_progress_callback(percentage) {
+    progress = percentage / 100;
+}
+
+Plymouth.SetMessageFunction(Function("display_message_callback"));
+Plymouth.SetBootProgressFunction(Function("display_progress_callback"));

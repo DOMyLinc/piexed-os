@@ -1,0 +1,14 @@
+# Network Interfaces Configuration
+auto lo
+iface lo inet loopback
+
+# Ethernet (will be auto-detected)
+# Replace enp0s3 with your actual interface name
+auto enp0s3
+iface enp0s3 inet dhcp
+
+# Wi-Fi (uncomment and configure if needed)
+# auto wlp0s20f3
+# iface wlp0s20f3 inet dhcp
+# wpa-ssid "YourNetworkName"
+# wpa-psk "YourPassword"

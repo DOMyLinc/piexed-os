@@ -1,0 +1,88 @@
+@echo off
+title Piẻxed OS - Upload to GitHub Helper
+color 0a
+cls
+
+echo.
+echo    ____  _       _    __ _      ___ _ __   ___ 
+echo   / ___|| |     | |  / _^ \   / _ \ '_ \ / _ \
+echo   \___ \| | ___ | |_| | | |_| |_) | | | |_) |
+echo    ____)__|____|_|\__^___/  \___/ .__/ \___/ 
+echo   ^|____/                                     ^|
+echo.
+echo         Upload Helper v1.0.0
+echo.
+echo ========================================
+echo.
+
+echo [1] Opening GitHub...
+start https://github.com/new
+
+echo.
+echo [2] Creating repository...
+echo.
+echo    Follow these steps:
+echo    1. On the GitHub page, enter:
+echo       - Repository name: piexed-os
+echo       - Description: Piẻxed OS - Professional Linux
+echo       - Select: Public
+echo    2. Click: Create repository
+echo.
+echo [3] After creating, copy the URL from your browser
+echo.
+
+set /p REPO_URL="Paste your GitHub repo URL here: "
+
+echo.
+echo [4] Now we need to install Git on your PC
+echo.
+echo    If you have Git installed, skip this.
+echo    Otherwise, download from: https://git-scm.com
+echo.
+set /p HAS_GIT="Do you have Git installed? (y/n): "
+
+if /i "%HAS_GIT%"=="n" (
+    echo.
+    echo    Downloading Git...
+    start https://github.com/git-for-windows/git/releases/download/v2.43.0.windows.1/Git-2.43.0-64-bit.exe
+    echo.
+    echo    Install Git, then come back and press Enter
+    pause
+)
+
+echo.
+echo [5] Setting up Git...
+echo.
+set /p NAME="Enter your name: "
+set /p EMAIL="Enter your email: "
+
+cd /d "%USERPROFILE%\Desktop\tiktokclone\piexed-os\piexed-os"
+
+git config --global user.name "%NAME%"
+git config --global user.email "%EMAIL%"
+
+echo.
+echo [6] Uploading files to GitHub...
+echo.
+git init
+git add .
+git commit -m "Piẻxed OS v1.0.0 - Professional Edition with Security Suite"
+
+git remote add origin %REPO_URL%
+git branch -M main
+git push -u origin main
+
+echo.
+echo ========================================
+echo.
+echo    UPLOAD COMPLETE!
+echo.
+echo    Now let's see your build:
+echo    1. Go to: %REPO_URL%/actions
+echo    2. Wait ~20 minutes for build
+echo    3. Download ISO from Releases
+echo.
+echo ========================================
+echo.
+
+pause

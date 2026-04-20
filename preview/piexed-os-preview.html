@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piexed OS - Preview</title>
+    <style>
+        :root {
+            --primary: #E63946;
+            --primary-dark: #9D0208;
+            --primary-light: #FF758F;
+            --secondary: #2A9D8F;
+            --bg-dark: #1A1A2E;
+            --bg-light: #16213E;
+            --text-light: #FAFAFA;
+            --text-gray: #B0B0B0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, rgba(230, 57, 70, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(42, 157, 143, 0.1) 0%, transparent 50%);
+            animation: bgMove 20s ease-in-out infinite;
+        }
+
+        @keyframes bgMove {
+            0%, 100% { transform: translate(-10%, -10%) rotate(0deg); }
+            50% { transform: translate(-15%, -15%) rotate(5deg); }
+        }
+
+        /* Header */
+        header {
+            background: rgba(26, 26, 46, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(230, 57, 70, 0.3);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo svg {
+            width: 48px;
+            height: 48px;
+            filter: drop-shadow(0 4px 8px rgba(230, 57, 70, 0.4));
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(230, 57, 70, 0.2);
+            border: 1px solid var(--primary);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(230, 57, 70, 0); }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #E63946 50%, #2A9D8F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-gray);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(230, 57, 70, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Desktop Preview */
+        .desktop-preview {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            color: var(--text-gray);
+            font-size: 1.125rem;
+        }
+
+        .desktop-frame {
+            background: #2d2d2d;
+            border-radius: 16px;
+            padding: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .desktop-window {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 16/10;
+        }
+
+        /* Top Panel */
+        .top-panel {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .panel-left, .panel-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .piexed-menu-btn {
+            background: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .panel-center {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .panel-icons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .panel-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .panel-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .panel-time {
+            font-size: 0.75rem;
+            text-align: right;
+        }
+
+        /* Desktop Area */
+        .desktop-area {
+            display: flex;
+            height: calc(100% - 48px);
+        }
+
+        .desktop-icons {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .desktop-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 80px;
+        }
+
+        .desktop-icon:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .desktop-icon svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .desktop-icon span {
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        /* Dock */
+        .dock {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(26, 26, 46, 0.9);
+            backdrop-filter: blur(20px);
+            padding: 8px 12px;
+            border-radius: 18px;
+            display: flex;
+            gap: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .dock-item {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.5rem;
+            position: relative;
+        }
+
+        .dock-item:hover {
+            transform: scale(1.2) translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .dock-item.running::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        /* Window */
+        .window {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            background: #2d2d2d;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .window-header {
+            background: #3d3d3d;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .window-control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .window-control.close { background: #FF5F57; }
+        .window-control.minimize { background: #FFBD2E; }
+        .window-control.maximize { background: #28CA41; }
+
+        .window-title {
+            flex: 1;
+            text-align: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .window-content {
+            padding: 1.5rem;
+            background: #2d2d2d;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .app-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .app-item:hover {
+            background: rgba(230, 57, 70, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .app-item svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .app-item span {
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        /* Specs Section */
+        .specs {
+            padding: 4rem 2rem;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .specs-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .spec-item {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+        }
+
+        .spec-value {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .spec-label {
+            color: var(--text-gray);
+            margin-top: 0.5rem;
+        }
+
+        /* Boot Preview */
+        .boot-preview {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .boot-sequence {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .boot-stage {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .boot-stage:nth-child(1) { animation-delay: 0.5s; }
+        .boot-stage:nth-child(2) { animation-delay: 1.5s; }
+        .boot-stage:nth-child(3) { animation-delay: 2.5s; }
+        .boot-stage:nth-child(4) { animation-delay: 3.5s; }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .boot-logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(230, 57, 70, 0.4);
+        }
+
+        .boot-logo svg {
+            width: 80px;
+            height: 80px;
+        }
+
+        .boot-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .loading-bar {
+            width: 300px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            animation: loading 4s ease-in-out forwards;
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* App Store Preview */
+        .appstore-preview {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .store-window {
+            background: #fafafa;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .store-header {
+            background: #1a1a2e;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .store-search {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.875rem;
+        }
+
+        .store-search::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .store-content {
+            display: flex;
+            min-height: 500px;
+        }
+
+        .store-sidebar {
+            width: 250px;
+            background: #f5f5f5;
+            padding: 1.5rem;
+        }
+
+        .store-category {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .store-category:hover {
+            background: rgba(230, 57, 70, 0.1);
+        }
+
+        .store-category.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .store-main {
+            flex: 1;
+            padding: 1.5rem;
+            background: white;
+        }
+
+        .store-section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .store-app {
+            background: #f9f9f9;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .store-app:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .store-app-icon {
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .store-app-info {
+            padding: 1rem;
+        }
+
+        .store-app-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+
+        .store-app-dev {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 0.75rem;
+        }
+
+        .store-app-btn {
+            width: 100%;
+            padding: 0.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .store-app-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            color: var(--text-gray);
+            margin-top: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            nav ul {
+                display: none;
+            }
+
+            .desktop-frame {
+                border-radius: 8px;
+                padding: 8px;
+            }
+
+            .dock {
+                padding: 6px 8px;
+                gap: 4px;
+            }
+
+            .dock-item {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .store-sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="strawberryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#E63946"/>
+                            <stop offset="100%" style="stop-color:#9D0208"/>
+                        </linearGradient>
+                        <linearGradient id="leafGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#2A9D8F"/>
+                            <stop offset="100%" style="stop-color:#1A7A6E"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M256 80 C180 80 120 150 120 220 C120 290 160 350 200 400 C220 430 256 470 256 470 C256 470 292 430 312 400 C352 350 392 290 392 220 C392 150 332 80 256 80 Z" fill="url(#strawberryGradient)"/>
+                    <g fill="url(#leafGradient)">
+                        <path d="M256 80 C250 50 280 30 256 10 C232 30 262 50 256 80 Z"/>
+                        <path d="M256 80 C220 70 180 40 160 20 C200 30 230 60 256 80 Z"/>
+                        <path d="M256 80 C210 90 170 80 150 70 C190 75 230 85 256 80 Z"/>
+                        <path d="M256 80 C292 70 332 40 352 20 C312 30 282 60 256 80 Z"/>
+                        <path d="M256 80 C302 90 342 80 362 70 C322 75 282 85 256 80 Z"/>
+                    </g>
+                    <g fill="#F4E4C1" opacity="0.9">
+                        <ellipse cx="180" cy="180" rx="6" ry="8" transform="rotate(-15 180 180)"/>
+                        <ellipse cx="220" cy="165" rx="6" ry="8" transform="rotate(-15 220 165)"/>
+                        <ellipse cx="265" cy="160" rx="6" ry="8" transform="rotate(-15 265 160)"/>
+                        <ellipse cx="310" cy="170" rx="6" ry="8" transform="rotate(-15 310 170)"/>
+                        <ellipse cx="165" cy="230" rx="6" ry="8" transform="rotate(-15 165 230)"/>
+                        <ellipse cx="210" cy="220" rx="6" ry="8" transform="rotate(-15 210 220)"/>
+                        <ellipse cx="255" cy="215" rx="6" ry="8" transform="rotate(-15 255 215)"/>
+                        <ellipse cx="300" cy="220" rx="6" ry="8" transform="rotate(-15 300 220)"/>
+                        <ellipse cx="185" cy="280" rx="6" ry="8" transform="rotate(-15 185 280)"/>
+                        <ellipse cx="230" cy="275" rx="6" ry="8" transform="rotate(-15 230 275)"/>
+                        <ellipse cx="280" cy="270" rx="6" ry="8" transform="rotate(-15 280 270)"/>
+                        <ellipse cx="200" cy="330" rx="6" ry="8" transform="rotate(-15 200 330)"/>
+                        <ellipse cx="250" cy="325" rx="6" ry="8" transform="rotate(-15 250 325)"/>
+                        <ellipse cx="220" cy="380" rx="6" ry="8" transform="rotate(-15 220 380)"/>
+                    </g>
+                </svg>
+                <span class="logo-text">PIEXED OS</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#desktop">Desktop</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#specs">Specs</a></li>
+                    <li><a href="#appstore">App Store</a></li>
+                    <li><a href="#boot">Boot</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <span class="hero-badge">Version 1.0.0 - Strawberry Fields</span>
+        <h1>Piexed OS</h1>
+        <p>A lightweight, professional Linux operating system optimized for low-end hardware with macOS-inspired design and strawberry branding.</p>
+        <div class="hero-buttons">
+            <a href="#" class="btn btn-primary">
+                Download ISO
+            </a>
+            <a href="#desktop" class="btn btn-secondary">
+                Preview Design
+            </a>
+        </div>
+    </section>
+
+    <!-- Desktop Preview -->
+    <section id="desktop" class="desktop-preview">
+        <div class="section-title">
+            <h2>Desktop Environment</h2>
+            <p>macOS-inspired interface with strawberry accents</p>
+        </div>
+        <div class="desktop-frame">
+            <div class="desktop-window">
+                <!-- Top Panel -->
+                <div class="top-panel">
+                    <div class="panel-left">
+                        <div class="piexed-menu-btn">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
+                                <path d="M12 3C7.03 3 3 7.03 3 12C3 16.97 7.03 21 12 21C16.97 21 21 16.97 21 12C21 7.03 16.97 3 12 3ZM12 18C8.13 18 5 14.87 5 11C5 7.13 8.13 4 12 4C15.87 4 19 7.13 19 11C19 14.87 15.87 18 12 18Z"/>
+                            </svg>
+                            Piẻxed
+                        </div>
+                    </div>
+                    <div class="panel-center">File Manager</div>
+                    <div class="panel-right">
+                        <div class="panel-icons">
+                            <div class="panel-icon">WiFi</div>
+                            <div class="panel-icon">Vol</div>
+                            <div class="panel-icon">Bat</div>
+                        </div>
+                        <div class="panel-time">
+                            <div>12:34 PM</div>
+                            <div style="font-size: 0.625rem;">Apr 19, 2026</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Desktop Area -->
+                <div class="desktop-area">
+                    <!-- Desktop Icons -->
+                    <div class="desktop-icons">
+                        <div class="desktop-icon">
+                            <svg viewBox="0 0 48 48" fill="none">
+                                <rect width="48" height="48" rx="12" fill="#4A90D9"/>
+                                <path d="M12 18H36V34C36 35.1 35.1 36 34 36H14C12.9 36 12 35.1 12 34V18Z" fill="white"/>
+                                <path d="M12 14H36V18H12V14Z" fill="#3A7BC8"/>
+                            </svg>
+                            <span>Home</span>
+                        </div>
+                        <div class="desktop-icon">
+                            <svg viewBox="0 0 48 48" fill="none">
+                                <rect width="48" height="48" rx="12" fill="#E63946"/>
+                                <circle cx="24" cy="22" r="10" fill="white"/>
+                                <path d="M16 38C16 33.58 19.58 30 24 30C28.42 30 32 33.58 32 38" stroke="white" stroke-width="4"/>
+                            </svg>
+                            <span>Trash</span>
+                        </div>
+                        <div class="desktop-icon">
+                            <svg viewBox="0 0 48 48" fill="none">
+                                <rect width="48" height="48" rx="12" fill="#2A9D8F"/>
+                                <rect x="10" y="14" width="28" height="20" rx="2" fill="white"/>
+                                <line x1="10" y1="20" x2="38" y2="20" stroke="#2A9D8F" stroke-width="2"/>
+                            </svg>
+                            <span>Documents</span>
+                        </div>
+                    </div>
+
+                    <!-- Window -->
+                    <div class="window">
+                        <div class="window-header">
+                            <div class="window-controls">
+                                <div class="window-control close"></div>
+                                <div class="window-control minimize"></div>
+                                <div class="window-control maximize"></div>
+                            </div>
+                            <div class="window-title">Applications</div>
+                        </div>
+                        <div class="window-content">
+                            <div class="app-grid">
+                                <div class="app-item">
+                                    <svg viewBox="0 0 32 32" fill="#FF6B35">
+                                        <circle cx="16" cy="16" r="14"/>
+                                        <circle cx="16" cy="16" r="10" fill="white"/>
+                                    </svg>
+                                    <span>Firefox</span>
+                                </div>
+                                <div class="app-item">
+                                    <svg viewBox="0 0 32 32" fill="#4A90D9">
+                                        <rect width="32" height="32" rx="4"/>
+                                        <rect x="4" y="4" width="24" height="24" rx="2" fill="white"/>
+                                    </svg>
+                                    <span>Files</span>
+                                </div>
+                                <div class="app-item">
+                                    <svg viewBox="0 0 32 32" fill="#7B68EE">
+                                        <rect width="32" height="32" rx="4"/>
+                                        <rect x="6" y="8" width="20" height="16" rx="2" fill="white"/>
+                                    </svg>
+                                    <span>Terminal</span>
+                                </div>
+                                <div class="app-item">
+                                    <svg viewBox="0 0 32 32" fill="#E63946">
+                                        <rect width="32" height="32" rx="4"/>
+                                        <rect x="4" y="4" width="24" height="24" rx="4" fill="white"/>
+                                    </svg>
+                                    <span>Store</span>
+                                </div>
+                                <div class="app-item">
+                                    <svg viewBox="0 0 32 32" fill="#2A9D8F">
+                                        <rect width="32" height="32" rx="4"/>
+                                        <rect x="6" y="10" width="20" height="4" fill="white"/>
+                                        <rect x="6" y="18" width="14" height="4" fill="white"/>
+                                    </svg>
+                                    <span>Settings</span>
+                                </div>
+                                <div class="app-item">
+                                    <svg viewBox="0 0 32 32" fill="#FFB800">
+                                        <rect width="32" height="32" rx="4"/>
+                                        <circle cx="16" cy="16" r="8" fill="white"/>
+                                    </svg>
+                                    <span>Photos</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dock -->
+                    <div class="dock">
+                        <div class="dock-item running">
+                            <svg viewBox="0 0 32 32" fill="#E63946">
+                                <rect width="32" height="32" rx="4"/>
+                                <rect x="4" y="4" width="24" height="24" rx="4" fill="white"/>
+                            </svg>
+                        </div>
+                        <div class="dock-item running">
+                            <svg viewBox="0 0 32 32" fill="#4A90D9">
+                                <circle cx="16" cy="16" r="14"/>
+                                <circle cx="16" cy="16" r="10" fill="white"/>
+                            </svg>
+                        </div>
+                        <div class="dock-item">
+                            <svg viewBox="0 0 32 32" fill="#2A9D8F">
+                                <rect width="32" height="32" rx="4"/>
+                                <rect x="6" y="8" width="20" height="16" rx="2" fill="white"/>
+                            </svg>
+                        </div>
+                        <div class="dock-item">
+                            <svg viewBox="0 0 32 32" fill="#7B68EE">
+                                <rect width="32" height="32" rx="4"/>
+                                <rect x="4" y="4" width="24" height="24" rx="4" fill="white"/>
+                            </svg>
+                        </div>
+                        <div class="dock-item">
+                            <svg viewBox="0 0 32 32" fill="#FF6B35">
+                                <circle cx="16" cy="16" r="14"/>
+                                <circle cx="16" cy="16" r="10" fill="white"/>
+                            </svg>
+                        </div>
+                        <div class="dock-item">
+                            <svg viewBox="0 0 32 32" fill="#9B59B6">
+                                <rect width="32" height="32" rx="4"/>
+                                <rect x="4" y="4" width="24" height="24" rx="4" fill="white"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="features">
+        <div class="section-title">
+            <h2>Key Features</h2>
+            <p>Everything you need, optimized for performance</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#9889;</div>
+                <h3>Lightweight & Fast</h3>
+                <p>Optimized for systems with just 1GB RAM. Uses zram compression, earlyOOM, and smart caching to deliver smooth performance.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128187;</div>
+                <h3>Ubuntu Compatible</h3>
+                <p>Full support for all Ubuntu packages. Install anything from the vast Ubuntu ecosystem with apt, snap, or flatpak.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#127760;</div>
+                <h3>macOS Experience</h3>
+                <p>Familiar dock with magnification, top panel with window controls, mission control workspaces, and smooth animations.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128241;</div>
+                <h3>App Store</h3>
+                <p>Modern GTK3-based software center. Browse, install, and update applications with one click.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128267;</div>
+                <h3>Dual Boot Ready</h3>
+                <p>Automatically detects Windows and other Linux installations. Install alongside your existing OS without data loss.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#128679;</div>
+                <h3>Android Support</h3>
+                <p>Run on Android devices via Termux or UserLAnd. Full Linux environment on your mobile device.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Specs -->
+    <section id="specs" class="specs">
+        <div class="specs-content">
+            <div class="section-title">
+                <h2>System Requirements</h2>
+                <p>Designed to work on minimal hardware</p>
+            </div>
+            <div class="specs-grid">
+                <div class="spec-item">
+                    <div class="spec-value">1GB</div>
+                    <div class="spec-label">RAM Minimum</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-value">1GB</div>
+                    <div class="spec-label">Storage Minimum</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-value">1GHz</div>
+                    <div class="spec-label">CPU Minimum</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-value">800x600</div>
+                    <div class="spec-label">Display Minimum</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Boot Preview -->
+    <section id="boot" class="boot-preview">
+        <div class="section-title">
+            <h2>Boot Experience</h2>
+            <p>Smooth, professional startup sequence</p>
+        </div>
+        <div class="boot-sequence">
+            <div class="boot-stage">
+                <div class="boot-logo">
+                    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M256 80 C180 80 120 150 120 220 C120 290 160 350 200 400 C220 430 256 470 256 470 C256 470 292 430 312 400 C352 350 392 290 392 220 C392 150 332 80 256 80 Z" fill="white"/>
+                        <g fill="#2A9D8F">
+                            <path d="M256 80 C250 50 280 30 256 10 C232 30 262 50 256 80 Z"/>
+                            <path d="M256 80 C220 70 180 40 160 20 C200 30 230 60 256 80 Z"/>
+                            <path d="M256 80 C292 70 332 40 352 20 C312 30 282 60 256 80 Z"/>
+                        </g>
+                    </svg>
+                </div>
+                <div class="boot-text">Piexed OS</div>
+            </div>
+            <div class="boot-stage">
+                <div class="loading-bar">
+                    <div class="loading-progress"></div>
+                </div>
+            </div>
+            <div class="boot-stage" style="opacity: 1;">
+                <div style="color: var(--primary);">Loading kernel...</div>
+            </div>
+            <div class="boot-stage" style="opacity: 1;">
+                <div style="color: var(--secondary);">Starting desktop environment...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Store Preview -->
+    <section id="appstore" class="appstore-preview">
+        <div class="section-title">
+            <h2>Piexed App Store</h2>
+            <p>One-click access to thousands of applications</p>
+        </div>
+        <div class="store-window">
+            <div class="store-header">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="#E63946">
+                    <path d="M12 3C7.03 3 3 7.03 3 12C3 16.97 7.03 21 12 21C16.97 21 21 16.97 21 12C21 7.03 16.97 3 12 3Z"/>
+                </svg>
+                <span style="color: white; font-weight: 600;">Piexed Store</span>
+                <input type="text" class="store-search" placeholder="Search applications...">
+            </div>
+            <div class="store-content">
+                <div class="store-sidebar">
+                    <div class="store-category active">All Applications</div>
+                    <div class="store-category">Featured</div>
+                    <div class="store-category">Productivity</div>
+                    <div class="store-category">Development</div>
+                    <div class="store-category">Games</div>
+                    <div class="store-category">Multimedia</div>
+                    <div class="store-category">Graphics</div>
+                    <div class="store-category">Network</div>
+                    <div class="store-category">System</div>
+                </div>
+                <div class="store-main">
+                    <div class="store-section-title">Featured Applications</div>
+                    <div class="store-grid">
+                        <div class="store-app">
+                            <div class="store-app-icon">&#127760;</div>
+                            <div class="store-app-info">
+                                <div class="store-app-name">Firefox</div>
+                                <div class="store-app-dev">Mozilla</div>
+                                <button class="store-app-btn">Install</button>
+                            </div>
+                        </div>
+                        <div class="store-app">
+                            <div class="store-app-icon" style="background: linear-gradient(135deg, #2A9D8F 0%, #1A7A6E 100%);">&#128203;</div>
+                            <div class="store-app-info">
+                                <div class="store-app-name">LibreOffice</div>
+                                <div class="store-app-dev">The Document Foundation</div>
+                                <button class="store-app-btn">Install</button>
+                            </div>
+                        </div>
+                        <div class="store-app">
+                            <div class="store-app-icon" style="background: linear-gradient(135deg, #7B68EE 0%, #5B48CE 100%);">&#128187;</div>
+                            <div class="store-app-info">
+                                <div class="store-app-name">VS Code</div>
+                                <div class="store-app-dev">Microsoft</div>
+                                <button class="store-app-btn">Install</button>
+                            </div>
+                        </div>
+                        <div class="store-app">
+                            <div class="store-app-icon" style="background: linear-gradient(135deg, #FFB800 0%, #E0A000 100%);">&#127916;</div>
+                            <div class="store-app-info">
+                                <div class="store-app-name">VLC</div>
+                                <div class="store-app-dev">VideoLAN</div>
+                                <button class="store-app-btn">Install</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="logo" style="justify-content: center;">
+            <svg width="48" height="48" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                <path d="M256 80 C180 80 120 150 120 220 C120 290 160 350 200 400 C220 430 256 470 256 470 C256 470 292 430 312 400 C352 350 392 290 392 220 C392 150 332 80 256 80 Z" fill="url(#strawberryGradient)"/>
+                <g fill="url(#leafGradient)">
+                    <path d="M256 80 C250 50 280 30 256 10 C232 30 262 50 256 80 Z"/>
+                    <path d="M256 80 C220 70 180 40 160 20 C200 30 230 60 256 80 Z"/>
+                    <path d="M256 80 C292 70 332 40 352 20 C312 30 282 60 256 80 Z"/>
+                </g>
+            </svg>
+            <span class="logo-text">PIEXED OS</span>
+        </div>
+        <p>Lightweight, Powerful, Professional - Designed for everyone</p>
+        <p style="margin-top: 2rem; font-size: 0.875rem;">Based on Ubuntu 24.04 LTS | Linux Kernel 6.1</p>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Animate on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.feature-card, .spec-item, .store-app').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s, transform 0.6s';
+            observer.observe(el);
+        });
+
+        // Boot animation restart
+        setTimeout(() => {
+            document.querySelector('.loading-progress').style.animation = 'none';
+            setTimeout(() => {
+                document.querySelector('.loading-progress').style.animation = 'loading 4s ease-in-out forwards';
+            }, 100);
+        }, 5000);
+    </script>
+</body>
+</html>

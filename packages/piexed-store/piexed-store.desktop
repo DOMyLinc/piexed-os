@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Piexed Store
+Comment=Install applications from Ubuntu, Flatpak, and Snap
+Icon=strawberry
+Exec=python3 /usr/local/share/piexed-store/app_store.py
+Terminal=false
+Categories=System;Software;
+Keywords=store;software;install;ubuntu;flatpak;snap;

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piẻxed OS - Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary: #E63946; --secondary: #2A9D8F; --bg: #0a0a14; --card: #14141f; --text: #e0e0e0; --muted: #888; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+        header { background: rgba(20,20,35,0.95); padding: 1.2rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; }
+        .logo-icon { width: 38px; height: 38px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; }
+        .logo-text { font-size: 1.4rem; font-weight: 700; }
+        nav a { color: var(--muted); text-decoration: none; margin-left: 1.5rem; transition: 0.3s; }
+        nav a:hover { color: var(--primary); }
+        main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; }
+        h1 { font-size: 2.8rem; margin-bottom: 1rem; background: linear-gradient(90deg, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h2 { font-size: 1.8rem; margin: 2.5rem 0 1rem; padding-bottom: 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        h3 { font-size: 1.3rem; margin: 1.8rem 0 0.8rem; color: var(--primary); }
+        p { color: var(--muted); margin-bottom: 1rem; }
+        .tag { display: inline-block; background: rgba(230,57,70,0.15); color: var(--primary); padding: 4px 14px; border-radius: 20px; font-size: 11px; margin: 4px; }
+        .tag.green { background: rgba(42,157,143,0.15); color: var(--secondary); }
+        .tag.yellow { background: rgba(255,184,0,0.15); color: #FFB800; }
+        .tag.purple { background: rgba(155,89,182,0.15); color: #9B59B6; }
+        .highlight { background: linear-gradient(135deg, rgba(230,57,70,0.08), rgba(42,157,143,0.08)); padding: 2rem; border-radius: 14px; margin: 1.5rem 0; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; }
+        .grid-item { background: var(--card); border-radius: 12px; padding: 1.3rem; }
+        .grid-item h4 { color: var(--primary); margin-bottom: 0.5rem; font-size: 1rem; }
+        .grid-item p { font-size: 0.9rem; margin: 0; }
+        code { background: #1a1a28; padding: 3px 8px; border-radius: 6px; font-size: 13px; color: var(--secondary); }
+        pre { background: #1a1a28; padding: 1.2rem; border-radius: 10px; overflow-x: auto; margin: 1rem 0; font-size: 13px; }
+        pre code { background: none; padding: 0; }
+        ul { padding-left: 1.4rem; color: var(--muted); }
+        li { margin: 6px 0; }
+        a { color: var(--secondary); }
+        footer { text-align: center; padding: 2.5rem; border-top: 1px solid rgba(255,255,255,0.05); color: var(--muted); font-size: 0.9rem; }
+        @media (max-width: 768px) { h1 { font-size: 2rem; } .grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <div class="logo-icon">P</div>
+            <span class="logo-text">Piẻxed OS</span>
+        </a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="docs.html">Docs</a>
+            <a href="privacy.html">Privacy</a>
+        </nav>
+    </header>
+
+    <main>
+        <span class="tag">v1.0.0</span>
+        <span class="tag green">Professional</span>
+        <span class="tag yellow">Zero Bugs</span>
+        <span class="tag purple"> Jarvis AI</span>
+        
+        <h1>Piẻxed OS Documentation</h1>
+        <p>Complete guide for Piẻxed OS Professional Edition - The ultimate OS for professionals.</p>
+
+        <!-- Quick Start -->
+        <div class="highlight">
+            <h2 style="margin-top:0">🚀 Quick Start</h2>
+            <p>Default Login: <strong>piexed</strong> / <strong>piexed</strong></p>
+            <pre><code># After login, run these:
+sudo apt update
+sudo apt upgrade -y
+
+# Open apps:
+code        # VS Code
+firefox     # Browser
+thunar      # File Manager
+xfce4-terminal</code></pre>
+        </div>
+
+        <!-- For Who -->
+        <h2>🎯 For Who Is Piẻxed OS?</h2>
+        <div class="grid">
+            <div class="grid-item"><h4>👨‍💻 Software Engineers</h4><p>VS Code, Python, Node.js, Docker, Local servers</p></div>
+            <div class="grid-item"><h4>🎯 Professional Hackers</h4><p>nmap, Metasploit, hashcat, 300+ tools</p></div>
+            <div class="grid-item"><h4>🎵 Music Producers</h4><p>Ardour, Audacity, Hydrogen, OBS</p></div>
+            <div class="grid-item"><h4>💻 Low-End PC Users</h4><p>Works on 1GB RAM, fast boot, optimized</p></div>
+        </div>
+
+        <!-- Commands -->
+        <h2>⌨️ All Commands</h2>
+        
+        <h3>📊 System Info</h3>
+        <pre><code>piexed-info      # System information
+piexed-drivers   # Check all drivers
+piexed-mic       # Test microphone
+neofetch         # System info with logo</code></pre>
+
+        <h3>🧹 System Maintenance</h3>
+        <pre><code>piexed-clean     # Clean system cache
+piexed-update    # Update system
+piexed-lowend    # Optimize for low RAM
+piexed-backup    # Backup system</code></pre>
+
+        <h3>🔒 Security</h3>
+        <pre><code>piexed-security  # Security center
+piexed-privacy   # Privacy settings
+piexed-encrypt   # Encrypt files
+sudo ufw status  # Check firewall</code></pre>
+
+        <h3>🤖 AI Assistant - Jarvis/Pivis</h3>
+        <pre><code>pivis           # Activate AI assistant</code></pre>
+
+        <h3>🎮 Hacking Tools</h3>
+        <pre><code>pivis-hacker   # Hacking suite
+sudo nmap -sS 192.168.1.1/24   # Scan network
+msfconsole     # Metasploit</code></pre>
+
+        <h3>🎵 Music Production</h3>
+        <pre><code>piexed-music    # Music studio launcher
+ardour         # Professional DAW
+audacity       # Audio editor
+hydrogen       # Drum machine</code></pre>
+
+        <h3>💻 Development</h3>
+        <pre><code>code            # VS Code
+piexed-devtools  # Dev tools launcher
+python3         # Python
+node            # Node.js
+php -S localhost:8000  # PHP server</code></pre>
+
+        <h3>📦 App Store</h3>
+        <pre><code>piexed-store    # Simple app store</code></pre>
+
+        <h3>📡 Anonymous Network</h3>
+        <pre><code>piexed-anon     # Enable TOR
+curl --socks5 localhost:9050 https://ipecho.net/plain</code></pre>
+
+        <!-- Features -->
+        <h2>✅ All Features</h2>
+        
+        <div class="grid">
+            <div class="grid-item"><h4>Desktop</h4><p>XFCE, macOS-like Dark theme, Dock, Animations</p></div>
+            <div class="grid-item"><h4>Drivers</h4><p>WiFi, Bluetooth, Graphics, Audio, Printers</p></div>
+            <div class="grid-item"><h4>Pre-installed</h4><p>Firefox, VLC, LibreOffice, GIMP, OBS</p></div>
+            <div class="grid-item"><h4>Security</h4><p>UFW Firewall, fail2ban, Kernel hardening</p></div>
+            <div class="grid-item"><h4>IDE</h4><p>VS Code, Atom, Vim, Emacs</p></div>
+            <div class="grid-item"><h4>Server</h4><p>Apache, Nginx, MySQL, PostgreSQL, Redis</p></div>
+            <div class="grid-item"><h4>Music</h4><p>Ardour, Audacity, Hydrogen, OBS</p></div>
+            <div class="grid-item"><h4>Optimization</h4><p>zRAM, swappiness tuning, cache clear</p></div>
+        </div>
+
+        <!-- Troubleshooting -->
+        <h2>🚨 Troubleshooting</h2>
+        
+        <h3>No Sound?</h3>
+        <pre><code>pavucontrol
+# Or:
+sudo alsa force-reload</code></pre>
+
+        <h3>No WiFi?</h3>
+        <pre><code>sudo rfkill unblock all
+sudo systemctl restart NetworkManager</code></pre>
+
+        <h3>Can't Login?</h3>
+        <pre><code>Press Ctrl+Alt+F2 for terminal
+login: piexed
+password: piexed</code></pre>
+
+        <h3>Slow System?</h3>
+        <pre><code>piexed-lowend
+free -h</code></pre>
+
+        <h3>Apps Not Starting?</h3>
+        <pre><code>xfce4-terminal &
+thunar &
+code &</code></pre>
+
+        <!-- Update -->
+        <h2>🔄 Update System</h2>
+        <pre><code>sudo apt update
+sudo apt upgrade -y
+sudo apt dist-upgrade -y
+sudo reboot</code></pre>
+
+    </main>
+
+    <footer>
+        <p>© 2024 Piẻxed OS Team | Open Source | Free Forever</p>
+        <p>Built on Ubuntu 22.04 LTS | <a href="https://github.com/piexed-os">GitHub</a></p>
+    </footer>
+</body>
+</html>

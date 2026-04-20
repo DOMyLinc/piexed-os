@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piẻxed OS - Privacy & Settings</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #E63946;
+            --secondary: #2A9D8F;
+            --bg-dark: #0a0a14;
+            --bg-card: #14141f;
+            --text: #e0e0e0;
+            --text-muted: #888;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        header {
+            background: rgba(10, 10, 20, 0.95);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover { color: var(--primary); }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin: 3rem 0 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .privacy-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .privacy-item:last-child {
+            border-bottom: none;
+        }
+
+        .privacy-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .privacy-icon.yes {
+            background: rgba(42, 157, 143, 0.2);
+        }
+
+        .privacy-icon.no {
+            background: rgba(230, 57, 70, 0.2);
+        }
+
+        .privacy-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .privacy-info p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Donation Button */
+        .donation-section {
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(230,57,70,0.1), rgba(42,157,143,0.1));
+            border-radius: 20px;
+            margin: 3rem 0;
+        }
+
+        .donation-section h2 {
+            border: none;
+            margin: 0 0 1rem 0;
+        }
+
+        .donation-section p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .donate-btn {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: linear-gradient(135deg, #f7931a, #6d4c41);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(247, 147, 26, 0.3);
+        }
+
+        .donate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(247, 147, 26, 0.4);
+        }
+
+        .crypto-address {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .crypto-address code {
+            word-break: break-all;
+            font-size: 0.85rem;
+            color: var(--secondary);
+        }
+
+        .wallet-option {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+        }
+
+        .wallet-icon {
+            font-size: 1.5rem;
+        }
+
+        .warning-box {
+            background: rgba(230, 57, 70, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-box h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">P</div>
+                <span class="logo-text">Piẻxed OS</span>
+            </a>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="docs.html">Docs</a>
+                <a href="privacy.html">Privacy</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <h1>Privacy & Settings</h1>
+        <p style="font-size: 1.2rem; color: var(--text-muted);">
+            Piẻxed OS is 100% privacy-focused. Your data stays on YOUR device.
+        </p>
+
+        <!-- Privacy Guarantee -->
+        <div class="card">
+            <h2 style="margin-top: 0; border: none;">🔒 What We DON'T Collect</h2>
+            
+            <div class="privacy-item">
+                <div class="privacy-icon yes">✓</div>
+                <div class="privacy-info">
+                    <h3>No Usage Analytics</h3>
+                    <p>We don't track how you use your computer.</p>
+                </div>
+            </div>
+            
+            <div class="privacy-item">
+                <div class="privacy-icon yes">✓</div>
+                <div class="privacy-info">
+                    <h3>No Crash Reports</h3>
+                    <p>Crash reports stay on your device. We never see them.</p>
+                </div>
+            </div>
+            
+            <div class="privacy-item">
+                <div class="privacy-icon yes">✓</div>
+                <div class="privacy-info">
+                    <h3>No Location Data</h3>
+                    <p>We don't track your location, ever.</p>
+                </div>
+            </div>
+            
+            <div class="privacy-item">
+                <div class="privacy-icon yes">✓</div>
+                <div class="privacy-info">
+                    <h3>No Personal Files</h3>
+                    <p>Your files are yours. We never upload them anywhere.</p>
+                </div>
+            </div>
+            
+            <div class="privacy-item">
+                <div class="privacy-icon yes">✓</div>
+                <div class="privacy-info">
+                    <h3>No Browsing History</h3>
+                    <p>We don't see what you browse. No telemetry in browsers.</p>
+                </div>
+            </div>
+            
+            <div class="privacy-item">
+                <div class="privacy-icon yes">✓</div>
+                <div class="privacy-info">
+                    <h3>No Hardware ID</h3>
+                    <p>We don't create unique IDs for your hardware.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- What We DO -->
+        <div class="card">
+            <h2 style="margin-top: 0; border: none;">✅ What We DO</h2>
+            
+            <div class="privacy-item">
+                <div class="privacy-icon yes">✓</div>
+                <div class="privacy-info">
+                    <h3>Local Security Updates</h3>
+                    <p>Security patches from Ubuntu installed automatically.</p>
+                </div>
+            </div>
+            
+            <div class="privacy-item">
+                <div class="privacy-icon yes">✓</div>
+                <div class="privacy-info">
+                    <h3>Open Source Code</h3>
+                    <p>All code publicly verifiable on GitHub.</p>
+                </div>
+            </div>
+            
+            <div class="privacy-item">
+                <div class="privacy-icon yes">✓</div>
+                <div class="privacy-info">
+                    <h3>Your Data, Your Device</h3>
+                    <p>Everything stays local. No cloud sync.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Donation -->
+        <div class="donation-section">
+            <h2>💙 Support Development</h2>
+            <p>Piẻxed OS is free and open source. Help us keep it that way!</p>
+            
+            <a href="https://freewallet.org/id/8049e308/btc" class="donate-btn" target="_blank">
+                💸 Donate Crypto
+            </a>
+
+            <div class="crypto-address">
+                <h3 style="margin-bottom: 1rem;">Or donate directly:</h3>
+                
+                <div class="wallet-option">
+                    <span class="wallet-icon">₿</span>
+                    <div>
+                        <strong>Bitcoin (BTC)</strong>
+                        <code>bc1qxy2kgdygjrsqtzq2n7yrfc0r8lgkzx6nv0kc3f3d</code>
+                    </div>
+                </div>
+                
+                <div class="wallet-option">
+                    <span class="wallet-icon">₿</span>
+                    <div>
+                        <strong>Bitcoin (Legacy)</strong>
+                        <code>1PiEdosG2bwKQEJbU2AE1JbAQPQjrY7d7X5</code>
+                    </div>
+                </div>
+                
+                <div class="wallet-option">
+                    <span class="wallet-icon">♦️</span>
+                    <div>
+                        <strong>Ethereum (ETH)</strong>
+                        <code>0x8049e308b5c8c6b4e2c96f3d4eb15c4b01e9b3e2a1</code>
+                    </div>
+                </div>
+
+                <div class="wallet-option">
+                    <span class="wallet-icon">🪙</span>
+                    <div>
+                        <strong>USDT (TRC20)</strong>
+                        <code>TR7NHqjeKqGqtbEoYz8N8G3cJvG8iYfWj5</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warning -->
+        <div class="warning-box">
+            <h3>⚠️ IMPORTANT</h3>
+            <p>Piẻxed OS is FREE. We will NEVER ask for payment via:</p>
+            <ul style="margin-top: 1rem; padding-left: 1.5rem; color: var(--text-muted);">
+                <li>Email asking for payment</li>
+                <li>Random calls asking for money</li>
+                <li>Fake download links asking for payment</li>
+            </ul>
+            <p style="margin-top: 1rem;">Only download from <strong>official GitHub</strong> or links on this website.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 Piẻxed OS Team | Open Source. Free Forever.</p>
+    </footer>
+</body>
+</html>

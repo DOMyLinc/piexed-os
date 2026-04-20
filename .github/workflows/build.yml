@@ -1,0 +1,510 @@
+# Piẻxed OS - Complete Automated Build
+name: Build Piẻxed OS ISO
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            debootstrap \
+            squashfs-tools \
+            xorriso \
+            grub-pc-bin \
+            grub-efi-amd64-bin \
+            mtools \
+            gdisk \
+            parted \
+            fakeroot \
+            rsync \
+            git \
+            curl \
+            wget
+      
+      - name: Create directories
+        run: |
+          mkdir -p output build workspace/{chroot,image,squashfs,efi,boot}
+      
+      - name: Download Ubuntu base system
+        run: |
+          cd workspace
+          sudo debootstrap --arch=amd64 --variant=minbase --include=ubuntu-standard jammy chroot http://archive.ubuntu.com/ubuntu/
+      
+      - name: Configure base system
+        run: |
+          # Sources list
+          cat << 'EOF' | sudo tee workspace/chroot/etc/apt/sources.list
+deb http://archive.ubuntu.com/ubuntu/ jammy main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse
+EOF
+          
+          # Hostname
+          echo "piexed-os" | sudo tee workspace/chroot/etc/hostname
+          
+          # Hosts
+          cat << 'EOF' | sudo tee workspace/chroot/etc/hosts
+127.0.0.1   localhost
+127.0.1.1   piexed-os
+::1     ip6-localhost ip6-loopback
+EOF
+      
+      - name: Install ALL packages
+        run: |
+          sudo chroot workspace/chroot /bin/bash << 'PKGSET'
+set -e
+export DEBIAN_FRONTEND=noninteractive
+export DEBIAN_PRIORITY=critical
+
+# Update
+apt-get update
+
+# ============ CORE SYSTEM ============
+apt-get install -y \
+    ubuntu-standard \
+    linux-image-generic \
+    linux-headers-generic \
+    linux-firmware \
+    systemd \
+    udev \
+    dbus \
+    sudo \
+    adduser \
+    passwd \
+    openssh-server \
+    network-manager \
+    network-manager-gnome \
+    iw \
+    wpasupplicant \
+    wireless-tools \
+    curl \
+    wget \
+    git \
+    vim \
+    nano \
+    sudo \
+    cron \
+    logrotate \
+    rsyslog \
+    apt-listchanges
+
+# ============ DESKTOP ============
+apt-get install -y \
+    xorg \
+    xfce4 \
+    xfce4-goodies \
+    xfce4-terminal \
+    thunar \
+    thunar-volman \
+    thunar-archive-plugin \
+    mousepad \
+    ristretto \
+    lightdm \
+    lightdm-gtk-greeter \
+    xfwm4 \
+    xfce4-panel \
+    xfce4-settings \
+    xfce4-appfinder \
+    xfce4-notifyd \
+    xfce4-power-manager \
+    xfce4-session \
+    xfce4-screenshooter \
+    xfce4-taskmanager \
+    xfce4-systemload-plugin \
+    xfce4-pulseaudio-plugin \
+    xfce4-battery-plugin \
+    xfce4-clipman-plugin \
+    gtk2-engines-xfce \
+    arc-theme \
+    papirus-icon-theme \
+    fonts-noto \
+    fonts-ubuntu \
+    xcompmgr \
+    picom
+
+# ============ APPS - INTERNET ============
+apt-get install -y \
+    firefox \
+    thunderbird \
+    firefox-locale-en \
+    hexchat
+
+# ============ APPS - MEDIA ============
+apt-get install -y \
+    vlc \
+    vlc-plugin-base \
+    rhythmbox \
+    shotwell \
+    gimp \
+    gimp-data \
+    Audacity \
+    mpv \
+    smplayer \
+    Brasero
+
+# ============ APPS - OFFICE ============
+apt-get install -y \
+    libreoffice \
+    libreoffice-gnome \
+    libreoffice-style-breeze \
+    evince \
+    file-roller \
+    gnome-calculator
+
+# ============ APPS - DEVELOPMENT ============
+apt-get install -y \
+    build-essential \
+    gcc \
+    g++ \
+    make \
+    cmake \
+    git \
+    python3 \
+    python3-pip \
+    code
+
+# ============ DRIVERS - NETWORK ============
+apt-get install -y \
+    firmware-iwlwifi \
+    firmware-atheros \
+    firmware-bnx2 \
+    firmware-brcm80211 \
+    firmware-intel-sound \
+    firmware-ipw2x00 \
+    firmware-libertas \
+    firmware-netxen \
+    firmware-realtek \
+    linux-firmware \
+    crda \
+    rfkill
+
+# ============ DRIVERS - BLUETOOTH ============
+apt-get install -y \
+    bluez \
+    bluez-cups \
+    bluez-obexd \
+    bluez-tools \
+    pulseaudio \
+    pulseaudio-module-bluetooth \
+    pulseaudio-utils \
+    pavucontrol \
+    blueman \
+    bluetooth \
+    rfkill
+
+# ============ DRIVERS - GRAPHICS ============
+apt-get install -y \
+    xserver-xorg-video-all \
+    xserver-xorg-video-amdgpu \
+    xserver-xorg-video-ati \
+    xserver-xorg-video-nouveau \
+    xserver-xorg-video-intel \
+    xserver-xorg-video-radeon \
+    xserver-xorg-video-vesa \
+    mesa-utils \
+    mesa-vulkan-drivers \
+    vulkan-tools \
+    libva-intel-driver \
+    libva-utils \
+    vdpauinfo
+
+# ============ DRIVERS - AUDIO ============
+apt-get install -y \
+    alsa-utils \
+    alsa-base \
+    pulseaudio \
+    libasound2 \
+    libasound2-plugins
+
+# ============ GAMING ============
+apt-get install -y \
+    steam-installer \
+    lutris \
+    gamemode \
+    wine \
+    wine64 \
+    winetricks \
+    playonlinux \
+    libgl1-mesa-glx \
+    libgl1-mesa-dri \
+    mesa-common-dev
+
+# ============ HARDWARE SUPPORT ============
+apt-get install -y \
+    thermald \
+    tlp \
+    acpi \
+    acpi-support \
+    powertop \
+    lm-sensors \
+    hddtemp \
+    hardinfo \
+    inxi \
+    dmidecode \
+    lshw \
+    usbutils \
+    pciutils
+
+# ============ SECURITY ============
+apt-get install -y \
+    ufw \
+    gufw \
+    fail2ban \
+    rkhunter \
+    chkrootkit \
+    libpam-pwquality \
+    gnome-keyring \
+    seahorse
+
+# ============ SYSTEM TOOLS ============
+apt-get install -y \
+    gparted \
+    gnome-disk-utility \
+    gnome-system-tools \
+    htop \
+    tmux \
+    screen \
+    Neofetch \
+    exfat-fuse \
+    ntfs-3g \
+    p7zip-full \
+    unrar
+
+# ============ PRINTERS/SCANNERS ============
+apt-get install -y \
+    cups \
+    cups-client \
+    hplip \
+    sane \
+    sane-utils \
+    xsane
+
+# Clean up
+apt-get autoremove -y
+apt-get clean
+apt-get autoclean
+
+# Create piexed user
+useradd -m -s /bin/bash piexed
+echo "piexed:piexed" | chpasswd
+usermod -aG sudo,audio,video,cdrom,dip,plugdev,scanner,wireshark,games,lpadmin piexed
+echo "piexed ALL=(ALL) NOPASSWD:ALL" | tee /etc/sudoers.d/piexed
+
+PKGSET
+
+      - name: Configure Desktop
+        run: |
+          sudo chroot workspace/chroot /bin/bash << 'DESKTOP'
+set -e
+
+# LightDM
+mkdir -p /etc/lightdm
+cat > /etc/lightdm/lightdm.conf << 'LM'
+[LightDM]
+autologin-user=piexed
+autologin-user-timeout=0
+user-session=xfce
+greeter-session=lightdm-gtk-greeter
+LM
+
+cat > /etc/lightdm/lightdm-gtk-greeter.conf << 'GREETER'
+[greeter]
+background = #1A1A2E
+theme-name = Arc-Dark
+icon-theme-name = Papirus-Dark
+font-name = Ubuntu 12
+xft-antialiasing = true
+xft-dpi = 96
+xft-hinting = true
+xft-hintstyle = hintslight
+GREETER
+
+# Enable services
+systemctl enable lightdm
+systemctl enable NetworkManager
+systemctl enable ssh
+systemctl enable bluetooth
+systemctl enable ufw
+systemctl enable fail2ban
+systemctl enable thermald
+
+# Firewall
+ufw default deny incoming
+ufw default allow outgoing
+ufw allow ssh
+ufw allow 22/tcp
+ufw enable
+
+# SSH config
+sed -i 's/^PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config 2>/dev/null || true
+
+# Piẻxed version
+cat > /etc/piexed-version << 'EOF'
+PIEXED_VERSION="1.0.0"
+PIEXED_CODENAME="Professional Edition"
+EOF
+
+cat > /etc/os-release << 'EOF'
+NAME="Piẻxed OS"
+VERSION="1.0.0 (Professional Edition)"
+ID=piexed
+ID_LIKE=ubuntu debian
+PRETTY_NAME="Piẻxed OS 1.0.0 Professional Edition"
+VERSION_ID="1.0.0"
+HOME_URL="https://piexed-os.org"
+SUPPORT_URL="https://github.com/piexed-os"
+BUG_REPORT_URL="https://github.com/piexed-os/issues"
+VERSION_CODENAME=professional
+UBUNTU_CODENAME=jammy
+EOF
+
+# Terminal config
+mkdir -p /home/piexed/.config/xfce4
+cat > /home/piexed/.config/xfce4/terminalrc << 'TERM'
+[Configuration]
+FontName=Ubuntu Mono 12
+ScrollbackLines=10000
+CursorBlinks=TRUE
+TERM
+
+DESKTOP
+
+      - name: Create Piẻxed Tools
+        run: |
+          # piexed-info
+          cat << 'EOF' | sudo tee workspace/chroot/usr/local/bin/piexed-info
+#!/bin/bash
+echo "============================================"
+echo "    Piẻxed OS - System Information"
+echo "============================================"
+echo ""
+cat /etc/piexed-version 2>/dev/null || echo "Version: 1.0.0"
+echo "Kernel: $(uname -r)"
+echo "Uptime: $(uptime -p)"
+echo ""
+echo "Disk:  $(df -h / | tail -1 | awk '{print $3 " / " $2 " (" $5 ")"}')"
+echo "Memory: $(free -h | awk '/^Mem:/ {print $3 " / " $2}')"
+echo "CPU:   $(nproc) cores @ $(cat /proc/cpuinfo | grep 'cpu MHz' | head -1 | awk '{print $3}') MHz"
+echo "============================================"
+EOF
+          sudo chmod +x workspace/chroot/usr/local/bin/piexed-info
+
+          # piexed-clean
+          cat << 'EOF' | sudo tee workspace/chroot/usr/local/bin/piexed-clean
+#!/bin/bash
+echo "Piẻxed OS - System Cleaner"
+apt-get clean
+apt-get autoremove -y
+apt-get autoclean
+rm -rf /var/cache/apt/archives/*
+rm -rf /var/tmp/*
+rm -rf /tmp/*
+find /home -name "*.cache" -type d -exec rm -rf {} \; 2>/dev/null || true
+echo "System cleaned!"
+EOF
+          sudo chmod +x workspace/chroot/usr/local/bin/piexed-clean
+
+          # piexed-update
+          cat << 'EOF' | sudo tee workspace/chroot/usr/local/bin/piexed-update
+#!/bin/bash
+echo "Piẻxed OS - Updater"
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get upgrade -y
+apt-get dist-upgrade -y
+echo "System updated!"
+EOF
+          sudo chmod +x workspace/chroot/usr/local/bin/piexed-update
+
+          # piexed-backup
+          cat << 'EOF' | sudo tee workspace/chroot/usr/local/bin/piexed-backup
+#!/bin/bash
+BACKUP_DIR="/var/backup/piexed"
+DATE=$(date +%Y%m%d%H%M%S)
+mkdir -p "$BACKUP_DIR/$DATE"
+dpkg --get-selections > "$BACKUP_DIR/$DATE/packages.txt"
+cp -r /etc "$BACKUP_DIR/$DATE/"
+[ -d /home ] && tar -czf "$BACKUP_DIR/home-$DATE.tar.gz" /home 2>/dev/null || true
+echo "Backup: $BACKUP_DIR/$DATE"
+ls -lh "$BACKUP_DIR/$DATE"
+EOF
+          sudo chmod +x workspace/chroot/usr/local/bin/piexed-backup
+
+          # piexed-store
+          cat << 'EOF' | sudo tee workspace/chroot/usr/local/bin/piexed-store
+#!/bin/bash
+echo "============================================"
+echo "      Piẻxed OS App Store"
+echo "============================================"
+echo ""
+echo "Categories:"
+echo "  1. Internet (Browser, Email, Chat)"
+echo "  2. Multimedia (Video, Music, Images)"
+echo "  3. Office (Documents)"
+echo "  4. Development (Code Editors)"
+echo "  5. Games (Steam, Lutris)"
+echo "  6. System Tools"
+echo "  7. Security"
+echo "  8. Update System"
+echo ""
+read -p "Choose: " choice
+case $choice in
+    1) apt-get install -y firefox thunderbird hexchat ;;
+    2) apt-get install -y vlc rhythmbox gimp ;;
+    3) apt-get install -y libreoffice ;;
+    4) apt-get install -y vscode atom intellij ;;
+    5) apt-get install -y steam lutris ;;
+    6) apt-get install -y gparted htop ;;
+    7) apt-get install -y gufw rkhunter ;;
+    8) apt-get update && apt-get upgrade -y ;;
+esac
+echo "Done!"
+EOF
+          sudo chmod +x workspace/chroot/usr/local/bin/piexed-store
+
+      - name: Create SquashFS
+        run: |
+          cd workspace
+          sudo rsync -a --exclude='/proc/*' --exclude='/sys/*' --exclude='/dev/*' --exclude='/run/*' --exclude='/tmp/*' chroot/ image/
+          sudo mksquashfs image squashfs/filesystem.squashfs -noappend -comp xz
+
+      - name: Create ISO
+        run: |
+          cd workspace
+          sudo mkdir -p efi/boot
+          sudo xorriso -as mkisofs \
+            -iso-level 3 \
+            -full-iso9660-filenames \
+            -volid "PIEXED_OS_1.0.0" \
+            -appid "Piẻxed OS Professional Edition" \
+            -publisher "Piẻxed OS Team" \
+            -output "output/piexed-os-1.0.0-professional.iso" \
+            .
+
+      - name: Upload ISO
+        uses: actions/upload-artifact@v4
+        with:
+          name: piexed-os-iso
+          path: output/piexed-os-1.0.0-professional.iso
+          retention-days: 30
+
+      - name: Upload to Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: output/piexed-os-1.0.0-professional.iso
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,19 @@
+# Build artifacts
+output/*.iso
+build/
+workspace/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+*.tmp
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

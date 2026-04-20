@@ -1,0 +1,17 @@
+[Plymouth Theme]
+Name=Piexed OS
+Description=Piexed OS Professional Boot Theme
+ModuleName=two-step
+
+[two-step]
+Transition1=rotate
+Transition2=rotate
+ImageDir=/usr/share/plymouth/themes/piexed
+Logo=/usr/share/plymouth/themes/piexed/logo.png
+BackgroundColor=0x1A1A2E
+ProgressColor=0xE63946
+ProgressBarColor=#E63946
+TextColor=#FFFFFF
+TitleText="Piẻxed OS"
+TitleFont=/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf
+DefaultMessageText="Starting..."
